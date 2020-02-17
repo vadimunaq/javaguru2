@@ -2,15 +2,19 @@ package com.javaguru.shoppinglist.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Optional;
 
 import com.javaguru.shoppinglist.domain.Product;
 import com.javaguru.shoppinglist.repository.ProductInMemoryRepository;
 import com.javaguru.shoppinglist.service.validation.ProductValidationService;
 
 public class ProductService {
-	private ProductInMemoryRepository repository = new ProductInMemoryRepository();
-	private ProductValidationService validationService = new ProductValidationService();
+	private ProductInMemoryRepository repository;
+	private ProductValidationService validationService;
+
+	public ProductService(ProductInMemoryRepository repository, ProductValidationService validationService) {
+		this.repository = repository;
+		this.validationService = validationService;
+	}
 
 	public Long createProduct(Product product) {
 		validationService.validate(product);
@@ -19,7 +23,7 @@ public class ProductService {
 	}
 
 	public Product findByID(Long id) {
-		return Optional.of(repository.findProductByID(id)).get();
+		return repository.findProductByID(id);
 	}
 
 	public void calculatePriceAftedDiscount(Product product) {

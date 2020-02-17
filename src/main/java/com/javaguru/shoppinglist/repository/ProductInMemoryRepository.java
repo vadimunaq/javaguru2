@@ -17,6 +17,10 @@ public class ProductInMemoryRepository {
 		return product;
 	}
 
+	public boolean isNameExist (Product product) {
+		return productRepository.containsValue(product.getName());
+	}
+
 	public Product findProductByID(Long id) {
 		return productRepository.get(id);
 	}

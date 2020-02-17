@@ -8,6 +8,8 @@ import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 public class PriceValidationRuleTest {
 
 	private PriceValidationRule victim = new PriceValidationRule();
@@ -20,16 +22,14 @@ public class PriceValidationRuleTest {
 	public void throwsPriceValidationRuleException() {
 		input = product(BigDecimal.valueOf(-100));
 
-		expectedException.expect(ProductValidationException.class);
-		expectedException.expectMessage("Product price must be greater than 0");
-
-		victim.validate(input);
+		assertThatThrownBy(() -> victim.validate(input))
+				.isInstanceOf(ProductValidationException.class)
+				.hasMessage("Product price must be greater than 0");
 	}
 
 	@Test
 	public void shouldValidateSuccess() {
 		input = product(BigDecimal.valueOf(10));
-
 		victim.validate(input);
 	}
 

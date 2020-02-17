@@ -6,7 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.math.BigDecimal;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ProductNameValidationRuleTest {
 
@@ -17,29 +17,23 @@ public class ProductNameValidationRuleTest {
 	public final ExpectedException expectedException = ExpectedException.none();
 
 	@Test
-	public void throwsInnuficientLenghtProductNameValidationRuleException() {
-		input = product("12");
-
-		expectedException.expect(ProductValidationException.class);
-		expectedException.expectMessage("Name length must be between 3 and 32 characters");
-
-		victim.validate(input);
-	}
-
-	@Test
-	public void throwsGreaterLenghtProductNameValidationRuleException() {
+	public void throwsLenghtProductNameValidationRuleException() {
 		input = product("123456789012345678901234567890123");
 
-		expectedException.expect(ProductValidationException.class);
-		expectedException.expectMessage("Name length must be between 3 and 32 characters");
+		assertThatThrownBy(() -> victim.validate(input))
+				.isInstanceOf(ProductValidationException.class)
+				.hasMessage("Name length must be between 3 and 32 characters");
 
-		victim.validate(input);
+		input = product("12");
+
+		assertThatThrownBy(() -> victim.validate(input))
+				.isInstanceOf(ProductValidationException.class)
+				.hasMessage("Name length must be between 3 and 32 characters");
 	}
 
 	@Test
 	public void shouldValidateSuccess() {
 		input = product("Test_name");
-
 		victim.validate(input);
 	}
 

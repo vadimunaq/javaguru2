@@ -8,6 +8,8 @@ import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 public class DiscountValidationRuleTest {
 
 	private DiscountValidationRule victim = new DiscountValidationRule();
@@ -20,36 +22,32 @@ public class DiscountValidationRuleTest {
 	public void throwsDiscountValidationExceptionForSmallerDiscount() {
 		input = product(BigDecimal.valueOf(-1), BigDecimal.valueOf(10));
 
-		expectedException.expect(ProductValidationException.class);
-		expectedException.expectMessage("The discount must be between 0 and 100");
-
-		victim.validate(input);
+		assertThatThrownBy(() -> victim.validate(input))
+				.isInstanceOf(ProductValidationException.class)
+				.hasMessage("The discount must be between 0 and 100");
 	}
 
 	@Test
 	public void throwsDiscountValidationExceptionForGreaterDiscount() {
 		input = product(BigDecimal.valueOf(1000), BigDecimal.valueOf(10));
 
-		expectedException.expect(ProductValidationException.class);
-		expectedException.expectMessage("The discount must be between 0 and 100");
-
-		victim.validate(input);
+		assertThatThrownBy(() -> victim.validate(input))
+				.isInstanceOf(ProductValidationException.class)
+				.hasMessage("The discount must be between 0 and 100");
 	}
 
 	@Test
 	public void throwsDiscountValidationExceptionForPrice() {
 		input = product(BigDecimal.valueOf(10), BigDecimal.valueOf(10));
 
-		expectedException.expect(ProductValidationException.class);
-		expectedException.expectMessage("Product price must be at least 20 to add a discount");
-
-		victim.validate(input);
+		assertThatThrownBy(() -> victim.validate(input))
+				.isInstanceOf(ProductValidationException.class)
+				.hasMessage("Product price must be at least 20 to add a discount");
 	}
 
 	@Test
 	public void shouldValidateSuccess() {
-		input = product(BigDecimal.valueOf(50), BigDecimal.valueOf(21));
-
+		input = product(BigDecimal.valueOf(50), BigDecimal.valueOf(20));
 		victim.validate(input);
 	}
 
