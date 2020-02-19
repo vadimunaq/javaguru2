@@ -12,7 +12,7 @@ public class ProductUniqueNameValidationRule implements ProductValidationRule {
 
 	@Override
 	public void validate(Product product) {
-		if (repository.isNameExist(product)) {
+		if (repository.isNameExist(product.getName())) {
 			throw new ProductValidationException("Product name should be unique");
 		}
 	}

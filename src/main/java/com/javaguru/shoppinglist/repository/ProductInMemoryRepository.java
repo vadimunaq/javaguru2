@@ -17,8 +17,9 @@ public class ProductInMemoryRepository {
 		return product;
 	}
 
-	public boolean isNameExist (Product product) {
-		return productRepository.containsValue(product.getName());
+	public boolean isNameExist (String productName) {
+		return productRepository.values().stream()
+				.anyMatch(product -> product.getName().equalsIgnoreCase(productName));
 	}
 
 	public Product findProductByID(Long id) {
